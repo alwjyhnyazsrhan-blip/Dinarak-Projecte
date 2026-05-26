@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>دينارك</title>
+  <style>
+    :root {
+      --bg: #08111f;
+      --panel: rgba(11, 18, 32, 0.92);
+      --panel-2: rgba(16, 24, 40, 0.96);
+      --line: rgba(255,255,255,0.08);
+      --text: #edf2f7;
+      --muted: #94a3b8;
+      --brand: #0ea5e9;
+      --brand-2: #8b5cf6;
+      --green: #10b981;
+      --orange: #f59e0b;
+      --red: #ef4444;
+      --radius: 22px;
+      --shadow: 0 20px 60px rgba(0,0,0,.28);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Tahoma, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(14,165,233,.18), transparent 22%),
+        radial-gradient(circle at top left, rgba(139,92,246,.18), transparent 24%),
+        linear-gradient(180deg, #020617, #08111f 35%, #0f172a 100%);
+      color: var(--text);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; }
+    .container { width: min(1200px, calc(100% - 28px)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 40;
+      backdrop-filter: blur(16px);
+      background: rgba(2, 6, 23, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 16px 0;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-badge {
+      width: 52px; height: 52px; border-radius: 18px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 16px 34px rgba(14,165,233,.35);
+      font-size: 24px; font-weight: 900;
+    }
+    .brand h1 { margin: 0; font-size: 1.35rem; }
+    .brand p { margin: 4px 0 0; color: var(--muted); font-size: .9rem; }
+    .top-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      border: none; border-radius: 16px; cursor: pointer; padding: 12px 16px; font-weight: 700;
+      transition: .2s ease; color: white;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); }
+    .btn-dark { background: #111827; border: 1px solid var(--line); }
+    .btn-outline { background: transparent; border: 1px solid var(--line); }
+    .btn-success { background: linear-gradient(135deg, #059669, #10b981); }
+    .hero { padding: 46px 0 24px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 22px;
+    }
+    .hero-card {
+      background:
+        radial-gradient(circle at top right, rgba(14,165,233,.25), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(139,92,246,.25), transparent 32%),
+        var(--panel-2);
+      overflow: hidden; position: relative;
+    }
+    .hero-card h2 { margin: 0 0 10px; font-size: 2rem; }
+    .hero-card p { color: #dbe7ff; line-height: 1.9; margin: 0 0 18px; }
+    .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tag {
+      padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08); color: #dbeafe; font-size: .92rem;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .section { padding: 10px 0 18px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+    .section-head h3 { margin: 0; font-size: 1.2rem; }
+    .section-head p { margin: 6px 0 0; color: var(--muted); }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+    .stat-card h4, .mini-card h4 { margin: 0; color: var(--muted); font-size: .9rem; }
+    .stat-card strong, .mini-card strong { display: block; margin-top: 10px; font-size: 1.8rem; }
+    .mini-stack, .plans, .tasks, .transactions, .forms-grid { display: grid; gap: 14px; }
+    .plans { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .plan-card, .task-card, .tx-row, .mini-card {
+      background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 20px; padding: 18px;
+    }
+    .plan-top, .row-between { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+    .price { font-size: 1.8rem; font-weight: 900; }
+    .muted { color: var(--muted); }
+    ul { margin: 0; padding-right: 18px; color: #dbeafe; }
+    li { margin: 7px 0; }
+    .badge {
+      padding: 8px 12px; border-radius: 999px; font-size: .85rem; border: 1px solid transparent;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .badge-green { color: #d1fae5; background: rgba(16,185,129,.16); border-color: rgba(16,185,129,.25); }
+    .badge-blue { color: #dbeafe; background: rgba(14,165,233,.16); border-color: rgba(14,165,233,.25); }
+    .badge-orange { color: #ffedd5; background: rgba(245,158,11,.16); border-color: rgba(245,158,11,.25); }
+    .badge-red { color: #fee2e2; background: rgba(239,68,68,.16); border-color: rgba(239,68,68,.25); }
+    .forms-grid { grid-template-columns: 1fr 1fr; }
+    .field { display: grid; gap: 8px; }
+    .field label { color: #cbd5e1; font-size: .92rem; }
+    .input, textarea, select {
+      width: 100%; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.04);
+      color: white; padding: 13px 14px; outline: none;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .copy-row {
+      display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-radius: 16px;
+      border: 1px solid var(--line); background: rgba(255,255,255,.04);
+    }
+    .copy-row code { flex: 1; direction: ltr; overflow: auto; white-space: nowrap; }
+    .task-card.done { border-color: rgba(16,185,129,.35); background: rgba(16,185,129,.09); }
+    .footer { padding: 24px 0 34px; color: var(--muted); text-align: center; }
+    .hidden { display: none !important; }
+    .toast {
+      position: fixed; left: 20px; bottom: 20px; background: #0f172a; border: 1px solid var(--line);
+      color: white; padding: 14px 16px; border-radius: 14px; box-shadow: var(--shadow); z-index: 90;
+      opacity: 0; pointer-events: none; transform: translateY(10px); transition: .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .inline-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .support-reply { margin-top: 14px; line-height: 1.9; color: #e0f2fe; }
+    @media (max-width: 980px) {
+      .hero, .grid-2, .forms-grid, .plans, .stats { grid-template-columns: 1fr; }
+      .topbar-inner, .section-head { align-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="brand-badge">د</div>
+        <div>
+          <h1>دينارك</h1>
+          <p>منصة مهام وعضويات وإحالات بإيداع وسحب رقمي فقط</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <a class="btn btn-outline hidden" id="adminLink" href="/admin">لوحة الأدمن</a>
+        <button class="btn btn-dark" id="refreshBtn">تحديث</button>
+        <button class="btn btn-primary" id="logoutBtn">تسجيل الخروج</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="hero">
+      <div class="card hero-card">
+        <div class="tag-row">
+          <span class="tag">تسجيل سريع وطبيعي</span>
+          <span class="tag">إيداع وسحب بالعملات الرقمية فقط</span>
+          <span class="tag">رابط إحالة قابل للمشاركة</span>
+          <span class="tag">دعم بالذكاء الاصطناعي</span>
+        </div>
+        <h2>مرحبا بك في دينارك</h2>
+        <p>
+          تم تحويل الفكرة من فلوسنا إلى <strong>دينارك</strong> مع إزالة كود الحساب نهائياً، واعتماد الإيداع والسحب عبر العملات الرقمية فقط، وربط الأرباح اليومية مباشرة بمستوى الاشتراك وعدد المهام اليومية لكل مستوى.
+        </p>
+        <div class="inline-actions">
+          <button class="btn btn-primary" onclick="document.getElementById('registerName').focus()">ابدأ الآن</button>
+          <button class="btn btn-outline" onclick="scrollToSection('plansSection')">عرض المستويات</button>
+          <button class="btn btn-outline" onclick="scrollToSection('supportSection')">الدعم الذكي</button>
+        </div>
+      </div>
+      <div class="card mini-stack">
+        <div class="mini-card">
+          <h4>الاسم الحالي</h4>
+          <strong>دينارك</strong>
+          <div class="muted">الهوية الجديدة مفعلة على الواجهة وواجهة الإدارة والـ API</div>
+        </div>
+        <div class="mini-card">
+          <h4>نظام الأرباح</h4>
+          <strong>ثابت حسب المستوى</strong>
+          <div class="muted">لا يوجد ربح عشوائي؛ كل مستوى له ربح يومي وعدد مهام محدد</div>
+        </div>
+        <div class="mini-card">
+          <h4>الدفع والسحب</h4>
+          <strong>Crypto Only</strong>
+          <div class="muted">BTC / ETH / USDT TRC20 / USDT BEP20</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="stats" id="statsGrid">
+        <div class="card stat-card"><h4>الرصيد</h4><strong id="statBalance">0.00</strong></div>
+        <div class="card stat-card"><h4>إجمالي الأرباح</h4><strong id="statEarned">0.00</strong></div>
+        <div class="card stat-card"><h4>المستوى الحالي</h4><strong id="statLevel">بدون</strong></div>
+        <div class="card stat-card"><h4>الإحالات</h4><strong id="statReferrals">0</strong></div>
+      </div>
+    </section>
+
+    <section class="section" id="authSection">
+      <div class="section-head">
+        <div>
+          <h3>التسجيل والدخول</h3>
+          <p>تسجيل سريع باسم، بريد، هاتف وكلمة مرور فقط، مع رمز إحالة اختياري.</p>
+        </div>
+      </div>
+      <div class="forms-grid">
+        <div class="card">
+          <h3 style="margin-top:0">إنشاء حساب</h3>
+          <div class="forms-grid" style="grid-template-columns:1fr;">
+            <div class="field"><label>الاسم الكامل</label><input class="input" id="registerName" placeholder="مثال: أحمد علي" /></div>
+            <div class="field"><label>البريد الإلكتروني</label><input class="input" id="registerEmail" placeholder="name@example.com" /></div>
+            <div class="field"><label>رقم الهاتف</label><input class="input" id="registerPhone" placeholder="07xxxxxxxxx" /></div>
+            <div class="field"><label>كلمة المرور</label><input class="input" id="registerPassword" type="password" placeholder="********" /></div>
+            <div class="field"><label>رمز الإحالة</label><input class="input" id="registerReferral" placeholder="اختياري" /></div>
+            <button class="btn btn-primary" id="registerBtn">إنشاء الحساب</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">تسجيل الدخول</h3>
+          <div class="forms-grid" style="grid-template-columns:1fr;">
+            <div class="field"><label>البريد الإلكتروني</label><input class="input" id="loginEmail" placeholder="name@example.com" /></div>
+            <div class="field"><label>كلمة المرور</label><input class="input" id="loginPassword" type="password" placeholder="********" /></div>
+            <button class="btn btn-dark" id="loginBtn">دخول</button>
+            <div class="muted">بعد تسجيل الدخول ستظهر لك المهام، المحافظ الرقمية، رابط الإحالة، وسجل المعاملات.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="plansSection">
+      <div class="section-head">
+        <div>
+          <h3>مستويات الاشتراك</h3>
+          <p>المستويات مرتبطة مباشرة بالمهام اليومية والربح اليومي الثابت.</p>
+        </div>
+        <div class="badge badge-blue" id="pendingPlanBadge">لا يوجد طلب اشتراك حالياً</div>
+      </div>
+      <div class="plans" id="plansGrid"></div>
+    </section>
+
+    <section class="section grid-2">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h3>المهام اليومية</h3>
+            <p>تنفذ حسب المستوى المفعل، والربح يضاف مباشرة إلى الرصيد.</p>
+          </div>
+          <div class="badge badge-green" id="tasksSummary">بانتظار التفعيل</div>
+        </div>
+        <div class="tasks" id="tasksGrid"></div>
+      </div>
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h3>رابط الإحالة</h3>
+            <p>شارك الرابط لزيادة عدد المستخدمين المرتبطين بحسابك.</p>
+          </div>
+          <div class="badge badge-orange" id="refSummary">0 إحالة</div>
+        </div>
+        <div class="copy-row"><code id="refLink">سجل الدخول لعرض الرابط</code><button class="btn btn-primary" id="copyReferralBtn">نسخ</button></div>
+        <div class="muted" style="margin-top:12px" id="refList">لا توجد إحالات بعد.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h3>الإيداع والسحب الرقمي</h3>
+          <p>تم حذف أي إيداع محلي أو كود حساب. جميع العمليات تتم عبر العملات الرقمية فقط.</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin-top:0">طلبات الإيداع</h3>
+          <div class="forms-grid" style="grid-template-columns:1fr;">
+            <div class="field"><label>العملة</label>
+              <select id="depositCurrency">
+                <option>BTC</option>
+                <option>ETH</option>
+                <option>USDT</option>
+              </select>
+            </div>
+            <div class="field"><label>الشبكة</label>
+              <select id="depositNetwork">
+                <option>BTC</option>
+                <option>ERC20</option>
+                <option>TRC20</option>
+                <option>BEP20</option>
+              </select>
+            </div>
+            <div class="field"><label>المبلغ</label><input class="input" id="depositAmount" type="number" min="0" step="0.01" placeholder="100" /></div>
+            <div class="field"><label>هاش التحويل</label><input class="input" id="depositHash" placeholder="Transaction Hash" /></div>
+            <div class="copy-row"><code id="walletAddress">سيظهر عنوان المحفظة هنا</code><button class="btn btn-dark" id="copyWalletBtn">نسخ العنوان</button></div>
+            <button class="btn btn-primary" id="depositBtn">إرسال طلب الإيداع</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">طلبات السحب</h3>
+          <div class="forms-grid" style="grid-template-columns:1fr;">
+            <div class="field"><label>العملة</label>
+              <select id="withdrawCurrency">
+                <option>BTC</option>
+                <option>ETH</option>
+                <option>USDT</option>
+              </select>
+            </div>
+            <div class="field"><label>الشبكة</label>
+              <select id="withdrawNetwork">
+                <option>BTC</option>
+                <option>ERC20</option>
+                <option>TRC20</option>
+                <option>BEP20</option>
+              </select>
+            </div>
+            <div class="field"><label>عنوان المحفظة</label><input class="input" id="withdrawAddress" placeholder="Wallet Address" /></div>
+            <div class="field"><label>المبلغ</label><input class="input" id="withdrawAmount" type="number" min="0" step="0.01" placeholder="25" /></div>
+            <button class="btn btn-dark" id="withdrawBtn">إرسال طلب السحب</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section grid-2" id="supportSection">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h3>الدعم بالذكاء الاصطناعي</h3>
+            <p>يساعد المستخدم في التسجيل، الإيداع، السحب، الإحالات والاشتراكات.</p>
+          </div>
+        </div>
+        <div class="field"><label>رسالة الدعم</label><textarea id="supportMessage" placeholder="مثال: كيف أفعل المستوى الذهبي؟"></textarea></div>
+        <button class="btn btn-primary" id="supportBtn">إرسال إلى المساعد</button>
+        <div class="support-reply" id="supportReply">سجل الدخول ثم أرسل سؤالك ليظهر الرد هنا.</div>
+      </div>
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h3>آخر المعاملات</h3>
+            <p>تظهر هنا طلبات الإيداع والسحب ومكافآت المهام والإحالة.</p>
+          </div>
+        </div>
+        <div class="transactions" id="transactionsList">
+          <div class="tx-row muted">لا توجد معاملات بعد.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer">دينارك — واجهة حديثة مع اشتراكات مرتبطة بالمهام اليومية، محافظ رقمية، دعم ذكي، ونظام إحالة.</div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const state = {
+      token: localStorage.getItem('dinarak_token') || '',
+      user: null,
+      plans: [],
+      tasks: [],
+      config: null,
+      referrals: null,
+      transactions: [],
+    };
+
+    const refFromUrl = new URLSearchParams(location.search).get('ref');
+    if (refFromUrl) document.getElementById('registerReferral').value = refFromUrl;
+
+    const $ = (id) => document.getElementById(id);
+    const fmt = (n) => Number(n || 0).toFixed(2);
+
+    function toast(message) {
+      const el = $('toast');
+      el.textContent = message;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2600);
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(state.token ? { Authorization: `Bearer ${state.token}` } : {}),
+          ...(options.headers || {}),
+        },
+        ...options,
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'حدث خطأ غير متوقع');
+      return data;
+    }
+
+    function renderStats() {
+      $('statBalance').textContent = fmt(state.user?.balance);
+      $('statEarned').textContent = fmt(state.user?.totalEarned);
+      $('statLevel').textContent = state.user?.activeSubscription?.name || 'بدون';
+      $('statReferrals').textContent = state.user?.referralsCount || 0;
+      $('pendingPlanBadge').textContent = state.user?.pendingSubscription
+        ? `طلب قيد المراجعة: ${state.user.pendingSubscription.name}`
+        : 'لا يوجد طلب اشتراك حالياً';
+      $('tasksSummary').textContent = state.user?.activeSubscription
+        ? `${state.user.activeSubscription.dailyTaskCount} مهمة / ${fmt(state.user.activeSubscription.dailyProfitUsd)} USDT يومياً`
+        : 'بانتظار التفعيل';
+      $('adminLink').classList.toggle('hidden', state.user?.role !== 'ADMIN');
+      $('authSection').classList.toggle('hidden', !!state.user);
+      $('logoutBtn').classList.toggle('hidden', !state.user);
+    }
+
+    function renderPlans() {
+      $('plansGrid').innerHTML = state.plans.map((plan) => `
+        <div class="plan-card">
+          <div class="plan-top">
+            <div>
+              <h3 style="margin:0 0 8px">${plan.name}</h3>
+              <div class="muted">${plan.dailyTaskCount} مهام يومية · ربح ${fmt(plan.dailyProfitUsd)} USDT يومياً</div>
+            </div>
+            <div class="price">$${fmt(plan.priceUsd)}</div>
+          </div>
+          <ul>
+            ${plan.benefits.split('،').map((item) => `<li>${item.trim()}</li>`).join('')}
+          </ul>
+          <button class="btn btn-primary" onclick="requestPlan('${plan.id}')">طلب هذا المستوى</button>
+        </div>
+      `).join('');
+    }
+
+    function renderTasks() {
+      if (!state.user?.activeSubscription) {
+        $('tasksGrid').innerHTML = '<div class="task-card muted">فعّل أحد المستويات أولاً من خلال إرسال طلب اشتراك ثم موافقة الأدمن.</div>';
+        return;
+      }
+      $('tasksGrid').innerHTML = state.tasks.map((task) => `
+        <div class="task-card ${task.completed ? 'done' : ''}">
+          <div class="row-between">
+            <div>
+              <h4 style="margin:0 0 8px">${task.title}</h4>
+              <div class="muted">${task.description}</div>
+            </div>
+            <div class="badge ${task.completed ? 'badge-green' : 'badge-blue'}">${fmt(task.rewardUsd)} USDT</div>
+          </div>
+          <div style="margin-top:14px">
+            <button class="btn ${task.completed ? 'btn-success' : 'btn-dark'}" ${task.completed ? 'disabled' : ''} onclick="completeTask('${task.id}')">
+              ${task.completed ? 'تم التنفيذ' : 'تنفيذ المهمة'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderReferrals() {
+      $('refLink').textContent = state.referrals?.link || 'سجل الدخول لعرض الرابط';
+      $('refSummary').textContent = `${state.referrals?.referrals?.length || 0} إحالة`;
+      $('refList').innerHTML = state.referrals?.referrals?.length
+        ? state.referrals.referrals.map((item) => `${item.fullName} — ${item.email}`).join('<br>')
+        : 'لا توجد إحالات بعد.';
+    }
+
+    function renderTransactions() {
+      $('transactionsList').innerHTML = state.transactions.length
+        ? state.transactions.map((tx) => `
+          <div class="tx-row">
+            <div class="row-between">
+              <div>
+                <strong>${tx.type}</strong>
+                <div class="muted">${tx.currency} / ${tx.network}</div>
+              </div>
+              <div class="badge ${tx.status === 'COMPLETED' ? 'badge-green' : tx.status === 'REJECTED' ? 'badge-red' : 'badge-orange'}">${tx.status}</div>
+            </div>
+            <div class="muted" style="margin-top:10px">${fmt(tx.amount)} — ${new Date(tx.createdAt).toLocaleString('ar-EG')}</div>
+          </div>
+        `).join('')
+        : '<div class="tx-row muted">لا توجد معاملات بعد.</div>';
+    }
+
+    function updateWalletAddress() {
+      if (!state.config) return;
+      const currency = $('depositCurrency').value;
+      const network = $('depositNetwork').value;
+      let address = state.config.wallets.BTC;
+      if (currency === 'ETH' || network === 'ERC20') address = state.config.wallets.ETH;
+      if (currency === 'USDT' && network === 'TRC20') address = state.config.wallets.USDT_TRC20;
+      if (currency === 'USDT' && network === 'BEP20') address = state.config.wallets.USDT_BEP20;
+      $('walletAddress').textContent = address;
+    }
+
+    async function loadInitial() {
+      const [config, plans] = await Promise.all([
+        api('/api/public/config'),
+        api('/api/subscriptions'),
+      ]);
+      state.config = config;
+      state.plans = plans;
+      renderPlans();
+      updateWalletAddress();
+
+      if (state.token) {
+        try {
+          state.user = await api('/api/auth/me');
+        } catch (error) {
+          state.token = '';
+          state.user = null;
+          localStorage.removeItem('dinarak_token');
+        }
+      }
+
+      if (state.user) {
+        const [tasks, referrals, transactions] = await Promise.all([
+          api('/api/tasks/daily').catch(() => ({ tasks: [] })),
+          api('/api/referrals/me').catch(() => ({ referrals: [], link: '—' })),
+          api('/api/wallet/transactions').catch(() => ([])),
+        ]);
+        state.tasks = tasks.tasks || [];
+        state.referrals = referrals;
+        state.transactions = transactions;
+      } else {
+        state.tasks = [];
+        state.referrals = null;
+        state.transactions = [];
+      }
+
+      renderStats();
+      renderTasks();
+      renderReferrals();
+      renderTransactions();
+    }
+
+    async function register() {
+      try {
+        const data = await api('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            fullName: $('registerName').value,
+            email: $('registerEmail').value,
+            phone: $('registerPhone').value,
+            password: $('registerPassword').value,
+            referralCode: $('registerReferral').value,
+          }),
+        });
+        state.token = data.token;
+        localStorage.setItem('dinarak_token', data.token);
+        toast('تم إنشاء الحساب بنجاح');
+        await loadInitial();
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    async function login() {
+      try {
+        const data = await api('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            email: $('loginEmail').value,
+            password: $('loginPassword').value,
+          }),
+        });
+        state.token = data.token;
+        localStorage.setItem('dinarak_token', data.token);
+        toast('تم تسجيل الدخول');
+        await loadInitial();
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    async function requestPlan(levelId) {
+      if (!state.user) return toast('سجل الدخول أولاً');
+      try {
+        const data = await api('/api/subscriptions/request', {
+          method: 'POST',
+          body: JSON.stringify({ levelId }),
+        });
+        toast(data.message);
+        await loadInitial();
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    async function completeTask(taskId) {
+      try {
+        const data = await api(`/api/tasks/${taskId}/complete`, { method: 'POST' });
+        toast(data.message);
+        await loadInitial();
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    async function submitDeposit() {
+      if (!state.user) return toast('سجل الدخول أولاً');
+      try {
+        const data = await api('/api/wallet/deposits', {
+          method: 'POST',
+          body: JSON.stringify({
+            currency: $('depositCurrency').value,
+            network: $('depositNetwork').value,
+            amount: $('depositAmount').value,
+            txHash: $('depositHash').value,
+          }),
+        });
+        toast(data.message);
+        await loadInitial();
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    async function submitWithdrawal() {
+      if (!state.user) return toast('سجل الدخول أولاً');
+      try {
+        const data = await api('/api/wallet/withdrawals', {
+          method: 'POST',
+          body: JSON.stringify({
+            currency: $('withdrawCurrency').value,
+            network: $('withdrawNetwork').value,
+            amount: $('withdrawAmount').value,
+            walletAddress: $('withdrawAddress').value,
+          }),
+        });
+        toast(data.message);
+        await loadInitial();
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    async function askSupport() {
+      if (!state.user) return toast('سجل الدخول أولاً');
+      try {
+        const data = await api('/api/support/ai', {
+          method: 'POST',
+          body: JSON.stringify({ message: $('supportMessage').value }),
+        });
+        $('supportReply').textContent = data.reply;
+      } catch (error) {
+        toast(error.message);
+      }
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text || '').then(() => toast('تم النسخ'));
+    }
+
+    $('registerBtn').addEventListener('click', register);
+    $('loginBtn').addEventListener('click', login);
+    $('logoutBtn').addEventListener('click', async () => {
+      state.token = '';
+      state.user = null;
+      localStorage.removeItem('dinarak_token');
+      toast('تم تسجيل الخروج');
+      await loadInitial();
+    });
+    $('refreshBtn').addEventListener('click', loadInitial);
+    $('depositBtn').addEventListener('click', submitDeposit);
+    $('withdrawBtn').addEventListener('click', submitWithdrawal);
+    $('supportBtn').addEventListener('click', askSupport);
+    $('copyReferralBtn').addEventListener('click', () => copyText($('refLink').textContent));
+    $('copyWalletBtn').addEventListener('click', () => copyText($('walletAddress').textContent));
+    $('depositCurrency').addEventListener('change', updateWalletAddress);
+    $('depositNetwork').addEventListener('change', updateWalletAddress);
+
+    loadInitial();
+  </script>
+</body>
+</html>
